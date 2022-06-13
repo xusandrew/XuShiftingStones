@@ -9,69 +9,79 @@ import java.awt.*;
 
 public class XuShiftingStones extends Applet implements ActionListener {
 	Panel p_card;
-	Panel card1, card2, card3, card4, card5; // the two screens
+	Panel[] cards = new Panel[8];
 	CardLayout cdLayout = new CardLayout();
+	Panel game_card;
 
 	int row = 9;
 	int col = 9;
 	int selected = -1;
 	int level = 0;
 	int lives = 3;
+	int screen = 1;
 
 	JLabel level_label, lives_label;
 	JButton pics[] = new JButton[row * col];
 
 	char[][] board = {
 			{},
-            {},
-            {}
+			{},
+			{}
 	};
 
 	public void init() {
 		p_card = new Panel();
 		p_card.setLayout(cdLayout);
-		screen1();
-		screen2();
-		screen3();
+		generate_screens();
 		resize(350, 500);
 		setLayout(new BorderLayout());
 		add("Center", p_card);
 	}
 
-	public void screen1() {
-		card1 = new Panel();
-		JButton bkg = new JButton(createImageIcon("background.jpg"));
-		bkg.setPreferredSize(new Dimension(350, 500));
-		bkg.setActionCommand("s2");
-		bkg.addActionListener(this);
-		card1.add(bkg);
-		p_card.add("1", card1);
+	public void generate_screens() {
+		for (int i = 0; i <= 6; i++) {
+			cards[i] = instructions_screen(i);
+			p_card.add("" + i, cards[i]);
+		}
+
+		game_screen();
 	}
 
-	public void screen2() {
-		card2 = new Panel();
-		JButton bkg = new JButton(createImageIcon("instructions.jpg"));
+	public Panel instructions_screen(int num) {
+		Panel output = new Panel();
+
+		ImageIcon image;
+		if (num == 0)
+			image = createImageIcon("pics/background.png");
+		else
+			image = createImageIcon("pics/instructions" + num + ".png");
+
+		JButton bkg = new JButton(image);
+		bkg.setBackground(new Color(229, 241, 207));
 		bkg.setPreferredSize(new Dimension(350, 500));
-		bkg.setActionCommand("s3");
+		bkg.setMargin(new Insets(0, 0, 0, 0));
+		bkg.setBorderPainted(false);
+		bkg.setActionCommand("screen" + (num + 1));
 		bkg.addActionListener(this);
-		card2.add(bkg);
-		p_card.add("2", card2);
+		output.add(bkg);
+
+		return output;
 	}
 
-	public void screen3() {
-		card3 = new Panel();
-		card3.setBackground(new Color(205, 224, 238));
+	public void game_screen() {
+		game_card = new Panel();
+		game_card.setBackground(new Color(229, 241, 207));
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.VERTICAL;
 
-		JLabel title = new JLabel("Sodoku");
+		JLabel title = new JLabel("Shifting Stones");
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 
-		// gbc.gridx = 0;
-		// gbc.gridy = 0;
-		// card3.add(title, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		game_card.add(title, gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_p1(), gbc);
@@ -97,7 +107,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		// gbc.gridy++;
 		// card3.add(get_p4(), gbc);
 
-		// p_card.add("3", card3);
+		p_card.add("7", game_card);
 	}
 
 	public void redraw() {
@@ -109,12 +119,12 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public boolean win() {
-        return false;
+		return false;
 	}
 
 	public void game_won() {
 		selected = -1;
-		JOptionPane.showMessageDialog(null, "Completed Sodoku!","Completed",
+		JOptionPane.showMessageDialog(null, "Completed Sodoku!", "Completed",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -126,7 +136,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public void game_lost() {
 		selected = -1;
-		JOptionPane.showMessageDialog(null, "Ran out of lives!","Not Completed",
+		JOptionPane.showMessageDialog(null, "Ran out of lives!", "Not Completed",
 				JOptionPane.INFORMATION_MESSAGE);
 		reset();
 	}
@@ -134,7 +144,11 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String action_command = e.getActionCommand();
 
-		
+		if (action_command.startsWith("screen")) {
+			char last_char = action_command.charAt(action_command.length() - 1);
+			cdLayout.show(p_card, "" + last_char);
+		}
+
 	}
 
 	protected static ImageIcon createImageIcon(String path) {
