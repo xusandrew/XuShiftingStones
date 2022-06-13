@@ -51,13 +51,17 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		Panel output = new Panel();
 
 		ImageIcon image;
-		if (num == 0)
-			image = createImageIcon("pics/background.png");
-		else
+		Color color;
+		if (num == 0){
+			image = createImageIcon("pics/background.jpg");
+			color = new Color(48,53,52);
+		} else {
 			image = createImageIcon("pics/instructions" + num + ".png");
+			color = new Color(229, 241, 207);
+		}
 
 		JButton bkg = new JButton(image);
-		bkg.setBackground(new Color(229, 241, 207));
+		bkg.setBackground(color);
 		bkg.setPreferredSize(new Dimension(350, 500));
 		bkg.setMargin(new Insets(0, 0, 0, 0));
 		bkg.setBorderPainted(false);
@@ -81,7 +85,6 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		game_card.add(title, gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_p1(), gbc);
@@ -108,6 +111,13 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		// card3.add(get_p4(), gbc);
 
 		p_card.add("7", game_card);
+	}
+
+	public JPanel get_p1(){
+
+
+
+		return new JPanel();
 	}
 
 	public void redraw() {
