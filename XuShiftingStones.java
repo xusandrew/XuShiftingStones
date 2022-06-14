@@ -12,15 +12,15 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	Panel[] cards = new Panel[8];
 	CardLayout cdLayout = new CardLayout();
 	Panel game_card;
+	Color background_color = new Color(229, 241, 207);
 
 	int row = 9;
 	int col = 9;
 	int selected = -1;
-	int level = 0;
-	int lives = 3;
+	int strikes = 0;
 	int screen = 1;
 
-	JLabel level_label, lives_label;
+	JLabel strikes_label;
 	JButton pics[] = new JButton[row * col];
 
 	char[][] board = {
@@ -57,7 +57,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			color = new Color(48,53,52);
 		} else {
 			image = createImageIcon("pics/instructions" + num + ".png");
-			color = new Color(229, 241, 207);
+			color = background_color;
 		}
 
 		JButton bkg = new JButton(image);
@@ -74,7 +74,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public void game_screen() {
 		game_card = new Panel();
-		game_card.setBackground(new Color(229, 241, 207));
+		game_card.setBackground(background_color);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
@@ -83,17 +83,19 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		JLabel title = new JLabel("Shifting Stones");
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		game_card.add(title, gbc);
+
+		gbc.gridy++;
+		game_card.add(get_p1(), gbc);
+
+		gbc.gridy++;
+		game_card.add(get_grid(), gbc);
 
 		// gbc.gridy++;
-		// card3.add(get_p1(), gbc);
-
-		// gbc.gridy++;
-		// card3.add(get_grid(), gbc);
-
-		// gbc.gridy++;
-		// card3.add(get_space(1, 40, true), gbc);
+		// game_card.add(get_space(1, 40, true), gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_p2(), gbc);
@@ -114,10 +116,47 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public JPanel get_p1(){
+		JPanel panel = new JPanel();
+		panel.setBackground(background_color);
+		panel.setPreferredSize(new Dimension(225, 25));
+
+		strikes_label = new JLabel("Strikes: " + strikes + "/4");
+		panel.add(strikes_label);
+
+		return panel; 
+	}
+
+	public JPanel get_grid() {
+		JPanel grid = new JPanel(new GridLayout(3,3));
+		grid.setBackground(background_color);
+		grid.setPreferredSize(new Dimension(210, 210));
 
 
+		char[][]grid_board = generate_new_grid();
 
-		return new JPanel();
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				JButton block = new JButton(createImageIcon("path")); // CHANGE
+				block.setPreferredSize(new Dimension(70, 70));
+				block.setMargin(new Insets(0, 0, 0, 0));
+				block.setBorderPainted(false);
+
+				grid.add(block);
+			}
+		}
+
+		return grid;
+	}
+
+	public char[][] generate_new_grid() {
+
+
+		int yb = 1;
+		int or = 2;
+		int pb = 3;
+		int gg = 3;
+
+		return null;
 	}
 
 	public void redraw() {
@@ -139,8 +178,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public boolean lost() {
-		if (lives <= 0)
-			return true;
+		// if (lives <= 0)
+		// 	return true;
 		return false;
 	}
 
