@@ -1,14 +1,14 @@
-public class patternCard {
+public class PatternCard {
     private int points;
     private int index;
     private char pattern[][] = new char[3][3];
 
-    public void patternCard(){
+    public void PatternCard(){
         points = 0;
         index = 0;
     }
 
-    public void patternCard(int p, int i, char[][] pt){
+    public void PatternCard(int p, int i, char[][] pt){
         points = p;
         index = i;
         pattern = pt;
