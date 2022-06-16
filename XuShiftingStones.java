@@ -129,15 +129,15 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	public JPanel get_grid() {
 		JPanel grid = new JPanel(new GridLayout(3,3));
 		grid.setBackground(background_color);
-		grid.setPreferredSize(new Dimension(210, 210));
+		grid.setPreferredSize(new Dimension(225, 225));
 
 
-		char[][]grid_board = generate_new_grid();
+		BlockCard[][]grid_board = generate_new_grid();
 
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				JButton block = new JButton(createImageIcon("path")); // CHANGE
-				block.setPreferredSize(new Dimension(70, 70));
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				JButton block = new JButton(grid_board[i][j].getImage()); // CHANGE
+				block.setPreferredSize(new Dimension(75, 75));
 				block.setMargin(new Insets(0, 0, 0, 0));
 				block.setBorderPainted(false);
 
@@ -148,15 +148,19 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return grid;
 	}
 
-	public char[][] generate_new_grid() {
+	public BlockCard[][] generate_new_grid() {
 
+		String[] colors = {"blue", "blue", "blue","green","green","green","red","red","yellow"};
 
-		int yb = 1;
-		int or = 2;
-		int pb = 3;
-		int gg = 3;
+		BlockCard[][] answer = new BlockCard[3][3];
 
-		return null;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				answer[i][j] = new BlockCard(colors[i*3 + j]);
+			}
+		}
+
+		return answer;
 	}
 
 	public void redraw() {
