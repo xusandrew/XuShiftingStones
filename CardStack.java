@@ -7,9 +7,10 @@ public class CardStack {
 
     public CardStack() {
         count = 0;
-        img = createImageIcon("back.png");
-        this.generateCards();
-        this.shuffle();
+        img = createImageIcon("pics/back.png");
+        generateCards();
+        shuffle();
+
     }
 
     public ImageIcon getImage(){
@@ -65,10 +66,14 @@ public class CardStack {
             int i = (int) (Math.random() * pattern.length);
 
             if (card_nums[points[i]] > 0){
-                this.push(new PatternCard(i));
+                push(new PatternCard(i));
                 points[i]--;
             }
         }
+    }
+
+    public ImageIcon findImage(){
+        return createImageIcon("pics/back.png");
     }
 
     protected static ImageIcon createImageIcon(String path) {

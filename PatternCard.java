@@ -17,6 +17,7 @@ public class PatternCard {
         pattern = Patterns.data[i];
         points = Patterns.points[i];
         
+        img = findImage();
     }
 
     public int getPoints(){

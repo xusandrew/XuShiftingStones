@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class XuShiftingStones extends Applet implements ActionListener {
 	Panel p_card;
-	Panel[] cards = new Panel[8];
+	Panel[] cards = new Panel[7];
 	CardLayout cdLayout = new CardLayout();
 	Panel game_card;
 	Color background_color = new Color(229, 241, 207);
@@ -42,6 +42,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		resize(350, 500);
 		setLayout(new BorderLayout());
 		add("Center", p_card);
+		cdLayout.show(p_card, "6");
 	}
 
 	public void generateScreens() {
@@ -204,6 +205,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		panel.add(getStackButton());
 
 		generateHand();
+
 		for (int i = 0; i < 4; i++) {
 			panel.add(hand_buttons[i]);
 		}
@@ -215,9 +217,12 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public JButton getStackButton() {
 		pile_button = new JButton(pile.getImage());
-		pile_button.setPreferredSize(new Dimension(50, 100));
+		pile_button.setPreferredSize(new Dimension(50, 70));
 		pile_button.setMargin(new Insets(0, 0, 0, 0));
 		pile_button.setBorderPainted(false);
+		pile_button.addActionListener(this);
+		pile_button.setActionCommand("pile");
+
 
 		return pile_button;
 	}
@@ -243,7 +248,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	public void generateHandButtons() {
 		for (int i = 0; i < hand.length; i++) {
 			hand_buttons[i] = new JButton(hand[i].getImage());
-			hand_buttons[i].setPreferredSize(new Dimension(50, 100));
+			hand_buttons[i].setPreferredSize(new Dimension(50, 70));
 			hand_buttons[i].setMargin(new Insets(0, 0, 0, 0));
 			hand_buttons[i].setBorderPainted(false);
 		}
@@ -251,9 +256,11 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public JButton getInstructionsButton() {
 		JButton instructions_button = new JButton(createImageIcon("pics/instrB2.png"));
-		instructions_button.setPreferredSize(new Dimension(50, 100));
+		instructions_button.setPreferredSize(new Dimension(50, 70));
 		instructions_button.setMargin(new Insets(0, 0, 0, 0));
 		instructions_button.setBorderPainted(false);
+		instructions_button.addActionListener(this);
+		instructions_button.setActionCommand("instructions");
 
 		return instructions_button;
 	}
@@ -295,6 +302,10 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		if (action_command.startsWith("screen")) {
 			char last_char = action_command.charAt(action_command.length() - 1);
 			cdLayout.show(p_card, "" + last_char);
+		} else if (action_command.equals("instructions")){
+			cdLayout.show(p_card, "1");
+		} else if (action_command.equals("pile")){
+			cdLayout.show(p_card, "1");
 		}
 
 	}
