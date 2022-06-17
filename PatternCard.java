@@ -1,14 +1,17 @@
+import javax.swing.*;
+
 public class PatternCard {
     private int points;
     private int index;
     private char pattern[][] = new char[3][3];
+    private ImageIcon img;
 
-    public void PatternCard(){
+    public PatternCard(){
         points = 0;
         index = 0;
     }
 
-    public void PatternCard(int p, int i, char[][] pt){
+    public PatternCard(int p, int i, char[][] pt){
         points = p;
         index = i;
         pattern = pt;
@@ -26,6 +29,10 @@ public class PatternCard {
         return pattern;
     }
 
+    public ImageIcon getImage(){
+        return img;
+    }
+
     public void setPoints(int p){
         points = p;
     }
@@ -38,8 +45,24 @@ public class PatternCard {
         pattern = p;
     }
 
+    public void setImage(ImageIcon i){
+        img = i;
+    }
+
     public String toString(){
         return "The card index is " + index + " and is worth " + points +  " points.";
     }
+
+    public ImageIcon findImage(){
+        return createImageIcon("pics/pattern" + (index + 1)+ ".png");
+    }
+
+    protected static ImageIcon createImageIcon(String path) {
+		java.net.URL imgURL = XuShiftingStones.class.getResource(path);
+		if (imgURL != null)
+			return new ImageIcon(imgURL);
+		else
+			return null;
+	}
 
 }

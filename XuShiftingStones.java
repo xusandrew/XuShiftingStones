@@ -21,6 +21,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	int screen = 1;
 
 	JLabel strikes_label;
+	JLabel game_label;
 	JButton pics[] = new JButton[row * col];
 
 	char[][] board = {
@@ -136,7 +137,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				JButton block = new JButton(grid_board[i][j].getImage()); // CHANGE
+				JButton block = new JButton(grid_board[i][j].getImage()); 
 				block.setPreferredSize(new Dimension(75, 75));
 				block.setMargin(new Insets(0, 0, 0, 0));
 				block.setBorderPainted(false);
@@ -150,6 +151,11 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public BlockCard[][] generate_new_grid() {
 
+		BlockCard[][] g = default_grid();
+		return shuffle_grid(g);
+	}
+
+	public BlockCard[][] default_grid(){
 		String[] colors = {"blue", "blue", "blue","green","green","green","red","red","yellow"};
 
 		BlockCard[][] answer = new BlockCard[3][3];
@@ -162,6 +168,55 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		return answer;
 	}
+
+	public BlockCard[][] shuffle_grid(BlockCard[][] gd){
+		for (int i = 0; i < 100; i++){
+			int a1 = (int) (Math.random() * 3);
+			int a2 = (int) (Math.random() * 3);
+
+			int b1 = (int) (Math.random() * 3);
+			int b2 = (int) (Math.random() * 3);
+
+			BlockCard temp = gd[a1][a2];
+			gd[a1][a2] = gd[b1][b2];
+			gd[b1][b2] = temp;
+
+			gd[a1][a2].switchColor();
+		}
+
+		return gd;
+	}
+
+	public JPanel get_p2(){
+		JPanel panel = new JPanel();
+		panel.setBackground(background_color);
+		panel.setPreferredSize(new Dimension(225, 50));
+
+		game_label = new JLabel("Welcome to Shifting Stones!");
+		panel.add(game_label);
+
+		return panel;
+	}
+
+	public JPanel get_p3(){
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(background_color);
+		panel.setPreferredSize(new Dimension(225, 25));
+
+		// level_label = new JLabel("Level: " + (level + 1));
+		// level_label.setPreferredSize(new Dimension(50, 25));
+
+		// lives_label = new JLabel("Lives: " + lives + "/3");
+		// lives_label.setPreferredSize(new Dimension(53, 25));
+
+		// panel.add(level_label, BorderLayout.WEST);
+		// panel.add(lives_label, BorderLayout.EAST);
+
+		panel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
+		return panel;
+	}
+
 
 	public void redraw() {
 
