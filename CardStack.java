@@ -1,13 +1,19 @@
-// Name: Andrew Xu
-// Date: 6/10/2022
-// Purpose: Stack class for game
+import javax.swing.*;
 
 public class CardStack {
     private int count;
     private PatternCard[] data = new PatternCard[16];
+    private ImageIcon img;
 
     public CardStack() {
         count = 0;
+        img = createImageIcon("back.png");
+        this.generateCards();
+        this.shuffle();
+    }
+
+    public ImageIcon getImage(){
+        return img;
     }
 
     public void push(PatternCard addMe) {
@@ -23,12 +29,12 @@ public class CardStack {
         return (count == 16);
     }
 
-    public Object pop() {
+    public PatternCard pop() {
         count--;
         return data[count];
     }
 
-    public Object peek() {
+    public PatternCard peek() {
         return data[count--];
     }
 
@@ -49,4 +55,27 @@ public class CardStack {
             data[r2] = temp;
         }
     }
+
+    public void generateCards(){
+        int[] card_nums = {0, 8, 4, 3, 0, 1};
+        String[][][] pattern = Patterns.data;
+        int[] points = Patterns.points;
+
+        while(!this.isFull()){
+            int i = (int) (Math.random() * pattern.length);
+
+            if (card_nums[points[i]] > 0){
+                this.push(new PatternCard(i));
+                points[i]--;
+            }
+        }
+    }
+
+    protected static ImageIcon createImageIcon(String path) {
+		java.net.URL imgURL = XuShiftingStones.class.getResource(path);
+		if (imgURL != null)
+			return new ImageIcon(imgURL);
+		else
+			return null;
+	}
 }

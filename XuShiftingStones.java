@@ -19,13 +19,17 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	int selected = -1;
 	int strikes = 0;
 	int screen = 1;
+	int cards_in_hand = 0;
 
 	JLabel strikes_label;
 	JLabel game_label;
+	JButton pile_button;
+	JButton[] hand_buttons = new JButton[4];
 
-	PatternCard[] hand;
+	PatternCard[] hand = new PatternCard[4];
+	CardStack pile;
 
-	char[][] board = {
+	BlockCard[][] board = {
 			{},
 			{},
 			{}
@@ -54,9 +58,9 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		ImageIcon image;
 		Color color;
-		if (num == 0){
+		if (num == 0) {
 			image = createImageIcon("pics/background.jpg");
-			color = new Color(48,53,52);
+			color = new Color(48, 53, 52);
 		} else {
 			image = createImageIcon("pics/instructions" + num + ".png");
 			color = background_color;
@@ -85,7 +89,6 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		JLabel title = new JLabel("Shifting Stones");
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 
-
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		game_card.add(title, gbc);
@@ -99,8 +102,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		gbc.gridy++;
 		game_card.add(getP2(), gbc);
 
-		// gbc.gridy++;
-		// card3.add(get_p3(), gbc);
+		gbc.gridy++;
+		game_card.add(getP3(), gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_space(1, 40, true), gbc);
@@ -111,7 +114,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		p_card.add("7", game_card);
 	}
 
-	public JPanel getP1(){
+	public JPanel getP1() {
 		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 25));
@@ -119,20 +122,19 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		strikes_label = new JLabel("Strikes: " + strikes + "/4");
 		panel.add(strikes_label);
 
-		return panel; 
+		return panel;
 	}
 
 	public JPanel getGrid() {
-		JPanel grid = new JPanel(new GridLayout(3,3));
+		JPanel grid = new JPanel(new GridLayout(3, 3));
 		grid.setBackground(background_color);
 		grid.setPreferredSize(new Dimension(225, 225));
 
-
-		BlockCard[][]grid_board = generateNewGrid();
+		board = generateNewGrid();
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				JButton block = new JButton(grid_board[i][j].getImage()); 
+				JButton block = new JButton(board[i][j].getImage());
 				block.setPreferredSize(new Dimension(75, 75));
 				block.setMargin(new Insets(0, 0, 0, 0));
 				block.setBorderPainted(false);
@@ -150,22 +152,22 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return shuffleGrid(g);
 	}
 
-	public BlockCard[][] defaultGrid(){
-		String[] colors = {"blue", "blue", "blue","green","green","green","red","red","yellow"};
+	public BlockCard[][] defaultGrid() {
+		String[] colors = { "blue", "blue", "blue", "green", "green", "green", "red", "red", "yellow" };
 
 		BlockCard[][] answer = new BlockCard[3][3];
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				answer[i][j] = new BlockCard(colors[i*3 + j]);
+				answer[i][j] = new BlockCard(colors[i * 3 + j]);
 			}
 		}
 
 		return answer;
 	}
 
-	public BlockCard[][] shuffleGrid(BlockCard[][] gd){
-		for (int i = 0; i < 100; i++){
+	public BlockCard[][] shuffleGrid(BlockCard[][] gd) {
+		for (int i = 0; i < 100; i++) {
 			int a1 = (int) (Math.random() * 3);
 			int a2 = (int) (Math.random() * 3);
 
@@ -182,7 +184,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return gd;
 	}
 
-	public JPanel getP2(){
+	public JPanel getP2() {
 		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 50));
@@ -193,34 +195,68 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return panel;
 	}
 
-	public JPanel getP3(){
-		JPanel panel = new JPanel(new BorderLayout());
+	public JPanel getP3() {
+		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
-		panel.setPreferredSize(new Dimension(225, 25));
+		panel.setPreferredSize(new Dimension(350, 100));
 
-		// level_label = new JLabel("Level: " + (level + 1));
-		// level_label.setPreferredSize(new Dimension(50, 25));
+		pile = new CardStack();
+		panel.add(getStackButton());
 
-		// lives_label = new JLabel("Lives: " + lives + "/3");
-		// lives_label.setPreferredSize(new Dimension(53, 25));
+		generateHand();
+		for (int i = 0; i < 4; i++) {
+			panel.add(hand_buttons[i]);
+		}
 
-		// panel.add(level_label, BorderLayout.WEST);
-		// panel.add(lives_label, BorderLayout.EAST);
-
-		panel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		panel.add(getInstructionsButton());
 
 		return panel;
 	}
 
-	public CardStack getStack(){
-		
-		
-		
-		//return CardStack();
+	public JButton getStackButton() {
+		pile_button = new JButton(pile.getImage());
+		pile_button.setPreferredSize(new Dimension(50, 100));
+		pile_button.setMargin(new Insets(0, 0, 0, 0));
+		pile_button.setBorderPainted(false);
 
-		return null;
+		return pile_button;
 	}
 
+	public void generateHand() {
+		int cards_to_draw = 4 - cards_in_hand;
+
+		for (int i = 0; i < cards_to_draw; i++) {
+			hand[findEmptyIndexInHand()] = pile.pop();
+		}
+
+		generateHandButtons();
+	}
+
+	public int findEmptyIndexInHand() {
+		for (int i = 0; i < hand.length; i++) {
+			if (hand[i] == null)
+				return i;
+		}
+		return -1;
+	}
+
+	public void generateHandButtons() {
+		for (int i = 0; i < hand.length; i++) {
+			hand_buttons[i] = new JButton(hand[i].getImage());
+			hand_buttons[i].setPreferredSize(new Dimension(50, 100));
+			hand_buttons[i].setMargin(new Insets(0, 0, 0, 0));
+			hand_buttons[i].setBorderPainted(false);
+		}
+	}
+
+	public JButton getInstructionsButton() {
+		JButton instructions_button = new JButton(createImageIcon("pics/instrB2.png"));
+		instructions_button.setPreferredSize(new Dimension(50, 100));
+		instructions_button.setMargin(new Insets(0, 0, 0, 0));
+		instructions_button.setBorderPainted(false);
+
+		return instructions_button;
+	}
 
 	public void redraw() {
 
@@ -242,7 +278,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public boolean lost() {
 		// if (lives <= 0)
-		// 	return true;
+		// return true;
 		return false;
 	}
 

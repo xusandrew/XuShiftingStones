@@ -1,5 +1,5 @@
 public class Patterns {
-        public static final String[][][] patterns = {
+        public static final String[][][] data = {
 
                         // 1
                         {

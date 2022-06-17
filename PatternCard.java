@@ -3,7 +3,7 @@ import javax.swing.*;
 public class PatternCard {
     private int points;
     private int index;
-    private char pattern[][] = new char[3][3];
+    private String pattern[][];
     private ImageIcon img;
 
     public PatternCard(){
@@ -11,10 +11,12 @@ public class PatternCard {
         index = 0;
     }
 
-    public PatternCard(int p, int i, char[][] pt){
-        points = p;
+    public PatternCard(int i){
         index = i;
-        pattern = pt;
+    
+        pattern = Patterns.data[i];
+        points = Patterns.points[i];
+        
     }
 
     public int getPoints(){
@@ -25,7 +27,7 @@ public class PatternCard {
         return index;
     }
 
-    public char[][] getPattern(){
+    public String[][] getPattern(){
         return pattern;
     }
 
@@ -41,7 +43,7 @@ public class PatternCard {
         index = i;
     }
 
-    public void setPattern(char[][] p){
+    public void setPattern(String[][] p){
         pattern = p;
     }
 
