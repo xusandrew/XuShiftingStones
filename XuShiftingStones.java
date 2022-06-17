@@ -2,7 +2,6 @@
 // Date: 6/07/22
 // Purpose: Shifting Stones Card Game
 
-import javax.smartcardio.Card;
 import javax.swing.*;
 import java.applet.*;
 import java.awt.event.*;
@@ -47,7 +46,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			p_card.add("" + i, cards[i]);
 		}
 
-		game_screen();
+		gameScreen();
 	}
 
 	public Panel instructionsScreen(int num) {
@@ -75,7 +74,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return output;
 	}
 
-	public void game_screen() {
+	public void gameScreen() {
 		game_card = new Panel();
 		game_card.setBackground(background_color);
 
@@ -92,13 +91,13 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		game_card.add(title, gbc);
 
 		gbc.gridy++;
-		game_card.add(get_p1(), gbc);
+		game_card.add(getP1(), gbc);
 
 		gbc.gridy++;
-		game_card.add(get_grid(), gbc);
+		game_card.add(getGrid(), gbc);
 
 		gbc.gridy++;
-		game_card.add(get_p2(), gbc);
+		game_card.add(getP2(), gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_p3(), gbc);
@@ -112,7 +111,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		p_card.add("7", game_card);
 	}
 
-	public JPanel get_p1(){
+	public JPanel getP1(){
 		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 25));
@@ -123,13 +122,13 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return panel; 
 	}
 
-	public JPanel get_grid() {
+	public JPanel getGrid() {
 		JPanel grid = new JPanel(new GridLayout(3,3));
 		grid.setBackground(background_color);
 		grid.setPreferredSize(new Dimension(225, 225));
 
 
-		BlockCard[][]grid_board = generate_new_grid();
+		BlockCard[][]grid_board = generateNewGrid();
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -145,13 +144,13 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return grid;
 	}
 
-	public BlockCard[][] generate_new_grid() {
+	public BlockCard[][] generateNewGrid() {
 
-		BlockCard[][] g = default_grid();
-		return shuffle_grid(g);
+		BlockCard[][] g = defaultGrid();
+		return shuffleGrid(g);
 	}
 
-	public BlockCard[][] default_grid(){
+	public BlockCard[][] defaultGrid(){
 		String[] colors = {"blue", "blue", "blue","green","green","green","red","red","yellow"};
 
 		BlockCard[][] answer = new BlockCard[3][3];
@@ -165,7 +164,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return answer;
 	}
 
-	public BlockCard[][] shuffle_grid(BlockCard[][] gd){
+	public BlockCard[][] shuffleGrid(BlockCard[][] gd){
 		for (int i = 0; i < 100; i++){
 			int a1 = (int) (Math.random() * 3);
 			int a2 = (int) (Math.random() * 3);
@@ -183,7 +182,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return gd;
 	}
 
-	public JPanel get_p2(){
+	public JPanel getP2(){
 		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 50));
@@ -194,7 +193,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return panel;
 	}
 
-	public JPanel get_p3(){
+	public JPanel getP3(){
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 25));
