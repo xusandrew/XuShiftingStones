@@ -2,6 +2,7 @@
 // Date: 6/07/22
 // Purpose: Shifting Stones Card Game
 
+import javax.smartcardio.Card;
 import javax.swing.*;
 import java.applet.*;
 import java.awt.event.*;
@@ -22,7 +23,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	JLabel strikes_label;
 	JLabel game_label;
-	JButton pics[] = new JButton[row * col];
+
+	PatternCard[] hand;
 
 	char[][] board = {
 			{},
@@ -33,22 +35,22 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	public void init() {
 		p_card = new Panel();
 		p_card.setLayout(cdLayout);
-		generate_screens();
+		generateScreens();
 		resize(350, 500);
 		setLayout(new BorderLayout());
 		add("Center", p_card);
 	}
 
-	public void generate_screens() {
+	public void generateScreens() {
 		for (int i = 0; i <= 6; i++) {
-			cards[i] = instructions_screen(i);
+			cards[i] = instructionsScreen(i);
 			p_card.add("" + i, cards[i]);
 		}
 
 		game_screen();
 	}
 
-	public Panel instructions_screen(int num) {
+	public Panel instructionsScreen(int num) {
 		Panel output = new Panel();
 
 		ImageIcon image;
@@ -95,14 +97,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		gbc.gridy++;
 		game_card.add(get_grid(), gbc);
 
-		// gbc.gridy++;
-		// game_card.add(get_space(1, 40, true), gbc);
-
-		// gbc.gridy++;
-		// card3.add(get_p2(), gbc);
-
-		// gbc.gridy++;
-		// card3.add(get_space(1, 40, true), gbc);
+		gbc.gridy++;
+		game_card.add(get_p2(), gbc);
 
 		// gbc.gridy++;
 		// card3.add(get_p3(), gbc);
@@ -217,6 +213,15 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return panel;
 	}
 
+	public CardStack getStack(){
+		
+		
+		
+		//return CardStack();
+
+		return null;
+	}
+
 
 	public void redraw() {
 
@@ -230,7 +235,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return false;
 	}
 
-	public void game_won() {
+	public void gameWon() {
 		selected = -1;
 		JOptionPane.showMessageDialog(null, "Completed Sodoku!", "Completed",
 				JOptionPane.INFORMATION_MESSAGE);
@@ -242,7 +247,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return false;
 	}
 
-	public void game_lost() {
+	public void gameLost() {
 		selected = -1;
 		JOptionPane.showMessageDialog(null, "Ran out of lives!", "Not Completed",
 				JOptionPane.INFORMATION_MESSAGE);

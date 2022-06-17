@@ -4,7 +4,7 @@
 
 public class CardStack {
     private int count;
-    private PatternCard data[] = new PatternCard[16];
+    private PatternCard[] data = new PatternCard[16];
 
     public CardStack() {
         count = 0;
@@ -20,7 +20,7 @@ public class CardStack {
     }
 
     public boolean isFull() {
-        return (count == 50);
+        return (count == 16);
     }
 
     public Object pop() {
