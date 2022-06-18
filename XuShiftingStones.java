@@ -184,10 +184,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public void updateBlockButtons(){
 		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < 3; j++) 
 				board_buttons[i][j].setIcon(board[i][j].getImage());
-				System.out.println(board[i][j].getSelected());
-			}
 		}
 	}
 
@@ -310,33 +308,36 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		int a = (int) n/3;
 		int b = n % 3;
 
+		System.out.println(n+""+a+""+b);
+
 		System.out.println("selected b4 = "+selected);
 
 		// CODE ALWAYS SELECTS 3 AFTER FIST PLAY FIX
 
 		if (selected == -1){ 
+			
 			select(n, a, b);
-			System.out.println("selected after = "+selected);
+			System.out.println("1selected after = "+selected);
 			return;
 		}
 		
 		if (selected == n){
 			flipBlock(a, b); 
 			deselect(a, b);
-			System.out.println("selected after = "+selected);
+			System.out.println("2selected after = "+selected);
 			return;
 		}
 
 		if (isAdjacent(selected, a, b)){
 			swapBlocks(selected, a, b);
-			deselect((int)selected/3, selected % 3);
+			// deselect((int)selected/3, selected % 3);
 			deselect(a, b);
-			System.out.println("selected after = "+selected);
+			System.out.println("3selected after = "+selected);
 			return;
 		}
 
 		deselect((int)selected/3, selected % 3);
-		System.out.println("selected after = "+selected);
+		System.out.println("4selected after = "+selected);
 		System.out.println(board[a][b].getImage());
 	}
 
@@ -383,16 +384,24 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		int x2 = a;
 		int y2 = b;
 
+		System.out.println(board_buttons[x1][y1].getActionCommand());
+		System.out.println(board_buttons[x2][y2].getActionCommand());
+		
 		BlockCard temp1 = board[x1][y1];
 		board[x1][y1] = board[x2][y2];
 		board[x2][y2] = temp1;
 
+
 		JButton temp2 = board_buttons[x1][y1];
 		board_buttons[x1][y1] = board_buttons[x2][y2];
 		board_buttons[x2][y2] = temp2;
-		
+
 		board_buttons[x1][y1].setActionCommand("block" + (x1 * 3 + y1));
 		board_buttons[x2][y2].setActionCommand("block" + (x2 * 3 + y2));
+
+		System.out.println(board_buttons[x1][y1].getActionCommand());
+		System.out.println(board_buttons[x2][y2].getActionCommand());
+
 
 		forceDiscard();
 	}
