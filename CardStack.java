@@ -8,8 +8,8 @@ public class CardStack {
     public CardStack() {
         count = 0;
         img = createImageIcon("pics/back.png");
-        generateCards();
-        shuffle();
+        this.generateCards();
+        this.shuffle();
 
     }
 
@@ -66,7 +66,7 @@ public class CardStack {
             int i = (int) (Math.random() * pattern.length);
 
             if (card_nums[points[i]] > 0){
-                push(new PatternCard(i));
+                this.push(new PatternCard(i));
                 points[i]--;
             }
         }

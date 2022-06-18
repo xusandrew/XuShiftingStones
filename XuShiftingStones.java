@@ -14,9 +14,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	Panel game_card;
 	Color background_color = new Color(229, 241, 207);
 
-	int row = 9;
-	int col = 9;
-	int selected = -1;
+	int turn = 0;
 	int strikes = 0;
 	int screen = 1;
 	int cards_in_hand = 0;
@@ -140,6 +138,9 @@ public class XuShiftingStones extends Applet implements ActionListener {
 				block.setMargin(new Insets(0, 0, 0, 0));
 				block.setBorderPainted(false);
 
+				block.addActionListener(this);
+				block.setActionCommand("block" + (i * 3 + j));
+
 				grid.add(block);
 			}
 		}
@@ -242,7 +243,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			if (hand[i] == null)
 				return i;
 		}
-		return -1;
+		// return -1;
+		return 0;
 	}
 
 	public void generateHandButtons() {
@@ -265,6 +267,16 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return instructions_button;
 	}
 
+	public void handleDraw(){
+		generateHand();
+		turn++;
+	}
+
+	public void handleClickBlock(char block_clicked){
+		
+
+	}
+
 	public void redraw() {
 
 	}
@@ -278,7 +290,6 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public void gameWon() {
-		selected = -1;
 		JOptionPane.showMessageDialog(null, "Completed Sodoku!", "Completed",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -290,7 +301,6 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public void gameLost() {
-		selected = -1;
 		JOptionPane.showMessageDialog(null, "Ran out of lives!", "Not Completed",
 				JOptionPane.INFORMATION_MESSAGE);
 		reset();
@@ -305,7 +315,9 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		} else if (action_command.equals("instructions")){
 			cdLayout.show(p_card, "1");
 		} else if (action_command.equals("pile")){
-			cdLayout.show(p_card, "1");
+			handleDraw();
+		} else if (action_command.startsWith("block")) {
+			handleClickBlock(action_command.charAt(5));
 		}
 
 	}
