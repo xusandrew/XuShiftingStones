@@ -52,7 +52,6 @@ public class BlockCard {
     public void setSelected(boolean s){
         selected = s;
         img = findImage();
-        System.out.println(img);
     }
 
     public String toString(){
@@ -90,8 +89,8 @@ public class BlockCard {
 
     public ImageIcon findImage(){
         if (selected)
-            return createImageIcon("pics/s" + color + ".jpg");
-        return createImageIcon("pics/" + color + ".jpg");
+            return createImageIcon("pics/s" + color + ".png");
+        return createImageIcon("pics/" + color + ".png");
     }
 
     protected static ImageIcon createImageIcon(String path) {

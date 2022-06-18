@@ -57,7 +57,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		ImageIcon image;
 		Color color;
 		if (num == 0) {
-			image = createImageIcon("pics/background.jpg");
+			image = createImageIcon("pics/background.png");
 			color = new Color(48, 53, 52);
 		} else {
 			image = createImageIcon("pics/instructions" + num + ".png");
@@ -129,7 +129,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				board_buttons[i][j] = new JButton(board[i][j].getImage());
+				board_buttons[i][j] = new JButton();
 				board_buttons[i][j].setPreferredSize(new Dimension(75, 75));
 				board_buttons[i][j].setMargin(new Insets(0, 0, 0, 0));
 				board_buttons[i][j].setBorderPainted(false);
@@ -140,6 +140,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			}
 		}
 
+		updateBlockButtons();
 		return grid;
 	}
 
@@ -184,10 +185,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	public void updateBlockButtons(){
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (selected == -1)
-					board[i][j].setSelected(false);
-
 				board_buttons[i][j].setIcon(board[i][j].getImage());
+				System.out.println(board[i][j].getSelected());
 			}
 		}
 	}
@@ -274,6 +273,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		for (int i = 0; i < hand.length; i++) {
 			if (hand[i] != null)
 				hand_buttons[i].setIcon(hand[i].getImage());
+
 		}
 	}
 
@@ -310,35 +310,93 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		int a = (int) n/3;
 		int b = n % 3;
 
+		System.out.println("selected b4 = "+selected);
+
+		// CODE ALWAYS SELECTS 3 AFTER FIST PLAY FIX
+
 		if (selected == -1){ 
 			select(n, a, b);
+			System.out.println("selected after = "+selected);
 			return;
 		}
 		
 		if (selected == n){
-			selected = -1;
 			flipBlock(a, b); 
+			deselect(a, b);
+			System.out.println("selected after = "+selected);
 			return;
 		}
-		
+
+		if (isAdjacent(selected, a, b)){
+			swapBlocks(selected, a, b);
+			deselect((int)selected/3, selected % 3);
+			deselect(a, b);
+			System.out.println("selected after = "+selected);
+			return;
+		}
+
+		deselect((int)selected/3, selected % 3);
+		System.out.println("selected after = "+selected);
+		System.out.println(board[a][b].getImage());
 	}
 
 	public void select(int n, int a, int b){
 		selected = n;
 		board[a][b].setSelected(true);
+	}
 
+	public void deselect(int a, int b){
+		selected = -1;
+		board[a][b].setSelected(false);
 	}
 
 	public void flipBlock(int a ,int b){
 		board[a][b].switchColor();
 		forceDiscard();
-
 	}
 
 	public void forceDiscard() {
 
 		return;
 	}
+
+
+	public boolean isAdjacent(int s, int x2, int y2){
+		int x1 = (int) s/3;
+		int y1 = s % 3;
+
+		System.out.println(x1+""+y1+"  "+x2+""+y2);
+
+		System.out.println(Math.abs(x1-x2) + Math.abs(y1-y2));
+
+		if (Math.abs(x1-x2) + Math.abs(y1-y2) == 1){
+			
+			return true;
+		}
+		return false;
+	}
+
+	public void swapBlocks(int s, int a, int b){
+		int x1 = (int) s/3;
+		int y1 = s % 3;
+
+		int x2 = a;
+		int y2 = b;
+
+		BlockCard temp1 = board[x1][y1];
+		board[x1][y1] = board[x2][y2];
+		board[x2][y2] = temp1;
+
+		JButton temp2 = board_buttons[x1][y1];
+		board_buttons[x1][y1] = board_buttons[x2][y2];
+		board_buttons[x2][y2] = temp2;
+		
+		board_buttons[x1][y1].setActionCommand("block" + (x1 * 3 + y1));
+		board_buttons[x2][y2].setActionCommand("block" + (x2 * 3 + y2));
+
+		forceDiscard();
+	}
+		
 
 	public void handleClickHandCard(char card_clicked){
 		int n = Character.getNumericValue(card_clicked);
