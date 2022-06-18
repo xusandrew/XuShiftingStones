@@ -57,7 +57,7 @@ public class PatternCard {
     }
 
     public ImageIcon findImage(){
-        return createImageIcon("pics/pattern" + (index + 1)+ ".png");
+        return createImageIcon("pics/pattern" + (index + 1) + ".png");
     }
 
     protected static ImageIcon createImageIcon(String path) {

@@ -18,20 +18,19 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	int strikes = 0;
 	int screen = 1;
 	int cards_in_hand = 0;
+	int cards_remaining = 16;
+	int selected = -1;
 
 	JLabel strikes_label;
-	JLabel game_label;
+	JLabel game_label1, game_label2;
 	JButton pile_button;
 	JButton[] hand_buttons = new JButton[4];
 
 	PatternCard[] hand = new PatternCard[4];
 	CardStack pile;
 
-	BlockCard[][] board = {
-			{},
-			{},
-			{}
-	};
+	BlockCard[][] board = new BlockCard[3][3];
+	JButton[][] board_buttons = new JButton[3][3];
 
 	public void init() {
 		p_card = new Panel();
@@ -104,11 +103,8 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		gbc.gridy++;
 		game_card.add(getP3(), gbc);
 
-		// gbc.gridy++;
-		// card3.add(get_space(1, 40, true), gbc);
-
-		// gbc.gridy++;
-		// card3.add(get_p4(), gbc);
+		gbc.gridy++;
+		game_card.add(getP4(), gbc);
 
 		p_card.add("7", game_card);
 	}
@@ -133,15 +129,14 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				JButton block = new JButton(board[i][j].getImage());
-				block.setPreferredSize(new Dimension(75, 75));
-				block.setMargin(new Insets(0, 0, 0, 0));
-				block.setBorderPainted(false);
+				board_buttons[i][j] = new JButton(board[i][j].getImage());
+				board_buttons[i][j].setPreferredSize(new Dimension(75, 75));
+				board_buttons[i][j].setMargin(new Insets(0, 0, 0, 0));
+				board_buttons[i][j].setBorderPainted(false);
+				board_buttons[i][j].addActionListener(this);
+				board_buttons[i][j].setActionCommand("block" + (i * 3 + j));
 
-				block.addActionListener(this);
-				block.setActionCommand("block" + (i * 3 + j));
-
-				grid.add(block);
+				grid.add(board_buttons[i][j]);
 			}
 		}
 
@@ -186,13 +181,24 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		return gd;
 	}
 
+	public void updateBlockButtons(){
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (selected == -1)
+					board[i][j].setSelected(false);
+
+				board_buttons[i][j].setIcon(board[i][j].getImage());
+			}
+		}
+	}
+
 	public JPanel getP2() {
 		JPanel panel = new JPanel();
 		panel.setBackground(background_color);
 		panel.setPreferredSize(new Dimension(225, 50));
 
-		game_label = new JLabel("Welcome to Shifting Stones!");
-		panel.add(game_label);
+		game_label1 = new JLabel("Welcome to Shifting Stones!");
+		panel.add(game_label1);
 
 		return panel;
 	}
@@ -205,7 +211,9 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		pile = new CardStack();
 		panel.add(getStackButton());
 
+		generateHandButtons();
 		generateHand();
+		updateHandButtons();
 
 		for (int i = 0; i < 4; i++) {
 			panel.add(hand_buttons[i]);
@@ -232,10 +240,15 @@ public class XuShiftingStones extends Applet implements ActionListener {
 		int cards_to_draw = 4 - cards_in_hand;
 
 		for (int i = 0; i < cards_to_draw; i++) {
-			hand[findEmptyIndexInHand()] = pile.pop();
-		}
+			if (pile.isEmpty())
+				return;
+			if (findEmptyIndexInHand() == -1)
+				return;
 
-		generateHandButtons();
+			hand[findEmptyIndexInHand()] = pile.pop();
+			cards_in_hand++;
+			
+		}
 	}
 
 	public int findEmptyIndexInHand() {
@@ -243,17 +256,36 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			if (hand[i] == null)
 				return i;
 		}
-		// return -1;
-		return 0;
+		return -1;
 	}
 
 	public void generateHandButtons() {
 		for (int i = 0; i < hand.length; i++) {
-			hand_buttons[i] = new JButton(hand[i].getImage());
+			hand_buttons[i] = new JButton();
 			hand_buttons[i].setPreferredSize(new Dimension(50, 70));
 			hand_buttons[i].setMargin(new Insets(0, 0, 0, 0));
 			hand_buttons[i].setBorderPainted(false);
+			hand_buttons[i].addActionListener(this);
+			hand_buttons[i].setActionCommand("hand_card"+i);
 		}
+	}
+
+	public void updateHandButtons(){
+		for (int i = 0; i < hand.length; i++) {
+			if (hand[i] != null)
+				hand_buttons[i].setIcon(hand[i].getImage());
+		}
+	}
+
+	public JPanel getP4(){
+		JPanel panel = new JPanel();
+		panel.setBackground(background_color);
+		panel.setPreferredSize(new Dimension(225, 50));
+
+		game_label2 = new JLabel("Cards Remaining: " + cards_remaining);
+		panel.add(game_label2);
+
+		return panel;
 	}
 
 	public JButton getInstructionsButton() {
@@ -269,16 +301,60 @@ public class XuShiftingStones extends Applet implements ActionListener {
 
 	public void handleDraw(){
 		generateHand();
+		updateHandButtons();
 		turn++;
 	}
 
 	public void handleClickBlock(char block_clicked){
+		int n = Character.getNumericValue(block_clicked);
+		int a = (int) n/3;
+		int b = n % 3;
+
+		if (selected == -1){ 
+			select(n, a, b);
+			return;
+		}
 		
+		if (selected == n){
+			selected = -1;
+			flipBlock(a, b); 
+			return;
+		}
+		
+	}
+
+	public void select(int n, int a, int b){
+		selected = n;
+		board[a][b].setSelected(true);
+
+	}
+
+	public void flipBlock(int a ,int b){
+		board[a][b].switchColor();
+		forceDiscard();
+
+	}
+
+	public void forceDiscard() {
+
+		return;
+	}
+
+	public void handleClickHandCard(char card_clicked){
+		int n = Character.getNumericValue(card_clicked);
+
+		if (hand[n] != null){
+			hand[n] = null;
+			hand_buttons[n].setIcon(createImageIcon(""));
+			cards_in_hand--;
+			cards_remaining--;
+		}
 
 	}
 
 	public void redraw() {
-
+		updateBlockButtons();
+		game_label2.setText("Cards Remaining: " + cards_remaining);
 	}
 
 	public void reset() {
@@ -307,6 +383,7 @@ public class XuShiftingStones extends Applet implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		
 		String action_command = e.getActionCommand();
 
 		if (action_command.startsWith("screen")) {
@@ -318,8 +395,11 @@ public class XuShiftingStones extends Applet implements ActionListener {
 			handleDraw();
 		} else if (action_command.startsWith("block")) {
 			handleClickBlock(action_command.charAt(5));
+		} else if (action_command.startsWith("hand_card")) {
+			handleClickHandCard(action_command.charAt(9));
 		}
 
+		redraw();
 	}
 
 	protected static ImageIcon createImageIcon(String path) {

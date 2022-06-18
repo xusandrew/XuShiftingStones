@@ -4,11 +4,13 @@ public class BlockCard {
     private String color;
     private String other;
     private ImageIcon img;
+    private boolean selected;
 
     public BlockCard(){
         color = "";
         other = "";
         img = findImage();
+        selected = false;
     }
 
 
@@ -16,6 +18,7 @@ public class BlockCard {
         color = c;
         other = findOther();
         img = findImage();
+        selected = false;
     }
 
     public String getColor(){
@@ -29,6 +32,9 @@ public class BlockCard {
     public ImageIcon getImage(){
         return img;
     }
+    public boolean getSelected(){
+        return selected;
+    }
 
     public void setColor(String c){
         color = c;
@@ -41,6 +47,12 @@ public class BlockCard {
 
     public void setImage(ImageIcon i){
         img = i;
+    }
+
+    public void setSelected(boolean s){
+        selected = s;
+        img = findImage();
+        System.out.println(img);
     }
 
     public String toString(){
@@ -77,6 +89,8 @@ public class BlockCard {
     }
 
     public ImageIcon findImage(){
+        if (selected)
+            return createImageIcon("pics/s" + color + ".jpg");
         return createImageIcon("pics/" + color + ".jpg");
     }
 
