@@ -6,59 +6,59 @@ public class BlockCard {
     private ImageIcon img;
     private boolean selected;
 
-    public BlockCard(){
+    public BlockCard() {
         color = "";
         other = "";
         img = findImage();
         selected = false;
     }
 
-
-    public BlockCard(String c){
+    public BlockCard(String c) {
         color = c;
         other = findOther();
         img = findImage();
         selected = false;
     }
 
-    public String getColor(){
+    public String getColor() {
         return color;
     }
 
-    public String getOther(){
-        return other;
-    }
-    
-    public ImageIcon getImage(){
+    // public String getOther(){
+    // return other;
+    // }
+
+    public ImageIcon getImage() {
         return img;
     }
-    public boolean getSelected(){
-        return selected;
-    }
 
-    public void setColor(String c){
-        color = c;
-        other = findOther();
-    }
+    // public boolean getSelected() {
+    // return selected;
+    // }
 
-    public void setOther(String o){
-        other = o;
-    }
+    // public void setColor(String c) {
+    // color = c;
+    // other = findOther();
+    // }
 
-    public void setImage(ImageIcon i){
-        img = i;
-    }
+    // public void setOther(String o) {
+    // other = o;
+    // }
 
-    public void setSelected(boolean s){
+    // public void setImage(ImageIcon i) {
+    // img = i;
+    // }
+
+    public void setSelected(boolean s) {
         selected = s;
         img = findImage();
     }
 
-    public String toString(){
-        return "The card color is "+ color;
-    }
+    // public String toString() {
+    // return "The card color is " + color;
+    // }
 
-    public void switchColor(){
+    public void switchColor() {
         String temp = color;
         color = other;
         other = temp;
@@ -66,13 +66,13 @@ public class BlockCard {
         img = findImage();
     }
 
-    public String findOther(){
-        String[] list1 = {"yellow","orange","purple","grey"};
-        String[] list2 = {"black","red","blue","green"};
+    public String findOther() {
+        String[] list1 = { "yellow", "orange", "purple", "grey" };
+        String[] list2 = { "black", "red", "blue", "green" };
 
         int index = 0;
         String ans = "";
-        while (ans.equals("")){
+        while (ans.equals("")) {
             String color1 = list1[index];
             String color2 = list2[index];
 
@@ -87,20 +87,18 @@ public class BlockCard {
         return ans;
     }
 
-    public ImageIcon findImage(){
+    public ImageIcon findImage() {
         if (selected)
             return createImageIcon("pics/s" + color + ".png");
         return createImageIcon("pics/" + color + ".png");
     }
 
     protected static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = XuShiftingStones.class.getResource(path);
-		if (imgURL != null)
-			return new ImageIcon(imgURL);
-		else
-			return null;
-	}
-
-    
+        java.net.URL imgURL = XuShiftingStones.class.getResource(path);
+        if (imgURL != null)
+            return new ImageIcon(imgURL);
+        else
+            return null;
+    }
 
 }

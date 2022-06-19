@@ -10,10 +10,9 @@ public class CardStack {
         img = createImageIcon("pics/back.png");
         this.generateCards();
         this.shuffle();
-
     }
 
-    public ImageIcon getImage(){
+    public ImageIcon getImage() {
         return img;
     }
 
@@ -57,30 +56,26 @@ public class CardStack {
         }
     }
 
-    public void generateCards(){
-        int[] card_nums = {0, 8, 4, 3, 0, 1};
+    public void generateCards() {
+        int[] card_nums = { 0, 8, 4, 3, 0, 1 };
         String[][][] pattern = Patterns.data;
         int[] points = Patterns.points;
 
-        while(!this.isFull()){
+        while (!this.isFull()) {
             int i = (int) (Math.random() * pattern.length);
 
-            if (card_nums[points[i]] > 0){
+            if (card_nums[points[i]] > 0) {
                 this.push(new PatternCard(i));
                 points[i]--;
             }
         }
     }
 
-    public ImageIcon findImage(){
-        return createImageIcon("pics/back.png");
-    }
-
     protected static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = XuShiftingStones.class.getResource(path);
-		if (imgURL != null)
-			return new ImageIcon(imgURL);
-		else
-			return null;
-	}
+        java.net.URL imgURL = XuShiftingStones.class.getResource(path);
+        if (imgURL != null)
+            return new ImageIcon(imgURL);
+        else
+            return null;
+    }
 }
